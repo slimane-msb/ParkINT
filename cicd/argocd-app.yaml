@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: django-microservices-platform
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/slimane-msb/Orchestra.git'
+    targetRevision: HEAD
+    path: deployment/
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: production 
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true 
+      - Validate=true

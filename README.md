@@ -157,22 +157,6 @@ kubernetes-django-platform/
     └── app/
 ```
 
-## Progressive Learning Path
-
-Each challenge folder (`ch1/`, `ch2/`, `ch7/`) contains:
-- **README.md**: Step-by-step implementation guide
-- **YAML manifests**: Kubernetes resource definitions
-- **Diagrams**: Visual architecture documentation
-- **Best practices**: Production deployment patterns
-
-### Challenge Progression
-1. **ch1**: Single pod deployment basics
-2. **ch2**: Service discovery and networking
-3. **ch3**: ConfigMaps and environment variables
-4. **ch4**: Secrets management and security
-5. **ch5**: Persistent storage with PVCs
-6. **ch6**: StatefulSets for databases
-7. **ch7**: Complete microservices platform
 
 ##  Security & Best Practices
 
