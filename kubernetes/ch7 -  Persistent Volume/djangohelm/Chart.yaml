@@ -1,6 +1,0 @@
-apiVersion: v2
-name: djangohelm
-description: Helm pour voiture-api
-type: application
-version: 0.1.0
-appVersion: "0.0.0"

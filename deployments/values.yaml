@@ -1,0 +1,83 @@
+namespace: u-9nl7s
+
+ingress:
+  host: "django.aayyss.csc8567.luxbulb.org"
+  service: voiture-svc
+  port: 8080
+
+
+services: 
+  - serviceName: voiture-api-svc
+    serviceSelector: voiture-api
+    port: 8080
+    targetPort: 8080
+    type: ClusterIP
+    headless: false
+  - serviceName: db
+    serviceSelector: maDb
+    port: 5432
+    targetPort: 5432
+    type: ClusterIP
+    headless: true
+  - serviceName: voiture-svc
+    serviceSelector: voiture-dep
+    port: 8080
+    targetPort: 8080
+    type: ClusterIP
+    headless: false
+
+deployment:
+  - name: voiture-dep
+    label: voiture-dep
+    replicas: 1
+    containers: 
+      name: voiture-dep-container
+      image: ssdev1254/voiture:v4
+      port: 8080
+      env:
+        RUNNING_CONTAINER: "public"
+        POSTGRES_DB: "voiture"
+        POSTGRES_USER: "yahia"
+        POSTGRES_PASSWORD: "yahia"
+        DATABASE_HOST: "db"
+        DATABASE_PORT: "5432"
+        API_PORT: "8080"
+        API_HOST: "http://voiture-api-svc:"
+        ALLOWED_HOST: "django.aayyss.csc8567.luxbulb.org"
+        CSRF_TRUSTED_ORIGINS: "https://django.aayyss.csc8567.luxbulb.org"
+
+  - name: voiture-api
+    label: voiture-api
+    replicas: 1
+    containers: 
+      name: voiture-api-container
+      image: ssdev1254/voiture:v4
+      port: 8080
+      env:
+        RUNNING_CONTAINER: "api"
+        POSTGRES_DB: "voiture"
+        POSTGRES_USER: "yahia"
+        POSTGRES_PASSWORD: "yahia"
+        DATABASE_HOST: "db"
+        DATABASE_PORT: "5432"
+        ALLOWED_HOST: "voiture-api-svc" # django.aayyss.csc8567.luxbulb.org si on souhaite exposer l'api a l'exterieur
+        CSRF_TRUSTED_ORIGINS: "https://django.aayyss.csc8567.luxbulb.org"
+
+statefulSet: 
+  - name: ma-db
+    label: maDb
+    replicas: 1
+    volumeClaim: 
+      name: db-data
+      storage: 0.1Gi
+      mountPath: /data
+    containers: 
+      name: my-container
+      image: postgres:16
+      port: 5432
+      env:
+        POSTGRES_DB: "voiture"
+        POSTGRES_USER: "yahia"
+        POSTGRES_PASSWORD: "yahia"
+        PGDATA: "/data/pgdata"
+              
